@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Rooms — any player can read/write game state
+    match /rooms/{roomCode} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if request.auth != null;
+    }
+
+    // Users — read is public (leaderboard, friends search)
+    // Write: you can only write your OWN document
+    match /users/{uid} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == uid;
+
+      match /games/{gameId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+
+      // Notifications: owner can read/write, ANY logged-in user can CREATE
+      // (needed so other users can send you friend requests, invites, etc.)
+      match /notifications/{notifId} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+        allow create: if request.auth != null;
+      }
+    }
+
+    // Friend requests — only involved parties can read/write/delete
+    match /friendRequests/{reqId} {
+      allow read: if request.auth != null &&
+        (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+      allow create: if request.auth != null &&
+        request.resource.data.from == request.auth.uid;
+      allow delete: if request.auth != null &&
+        (resource.data.from == request.auth.uid || resource.data.to == request.auth.uid);
+    }
+  }
+}

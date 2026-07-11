@@ -1,0 +1,25 @@
+#screen-home { justify-content:center; padding-top:40px; }
+#screen-home > div { display:flex; flex-direction:column; align-items:center; }
+
+.home-logo-img {
+  width: clamp(220px, 55vw, 340px);
+  height: auto; display: block;
+  margin: 0 auto 20px; mix-blend-mode: screen;
+}
+.home-desc {
+  font-size: 15px; color: var(--trans);
+  margin-bottom: 24px; line-height: 1.6;
+  max-width: 400px;
+}
+.home-badges { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-bottom:28px; }
+.home-btns { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; }
+
+/* ── Auth ── */
+#screen-auth { justify-content:center; padding-top:40px; }
+#screen-auth > div { display:flex; flex-direction:column; align-items:center; }
+
+/* ── Profile ── */
+.avatar-picker {
+  background: var(--surface2); border:1px solid var(--border);
+  border-radius: var(--radius-lg); padding:16px; margin-bottom:16px;
+}
